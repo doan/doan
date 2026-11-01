@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Giá vàng theo chỉ</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Giá vàng <small>/ chỉ</small></h1>
+    <div id="user"></div>
+  </header>
+
+  <main id="signed-out" hidden>
+    <p>Sign in to see daily SJC prices and track your gold.</p>
+    <button id="login">Sign in with Google</button>
+  </main>
+
+  <main id="app" hidden>
+    <section class="cards" id="today"></section>
+
+    <section>
+      <div class="row">
+        <h2>History</h2>
+        <select id="type"><option value="bar">SJC bar</option><option value="ring">SJC 9999 ring</option></select>
+        <select id="range"><option value="30">30 days</option><option value="90">90 days</option><option value="365">1 year</option></select>
+      </div>
+      <svg id="chart" viewBox="0 0 600 220" preserveAspectRatio="none" role="img" aria-label="Price chart"></svg>
+      <table id="history"><thead><tr><th>Date</th><th>You buy</th><th>Shop buys</th><th>Δ</th></tr></thead><tbody></tbody></table>
+    </section>
+
+    <section>
+      <h2>My gold</h2>
+      <form id="holding-form">
+        <select name="type"><option value="bar">Bar</option><option value="ring">Ring</option></select>
+        <input name="chi" type="number" step="0.1" min="0.1" placeholder="Chỉ" required />
+        <input name="pricePerChi" type="number" step="1000" min="1" placeholder="Paid per chỉ (đ)" required />
+        <input name="boughtOn" type="date" required />
+        <button>Add</button>
+      </form>
+      <table id="holdings"><thead><tr><th>Bought</th><th>Type</th><th>Chỉ</th><th>Paid/chỉ</th><th>Sell-back value</th><th>P/L</th><th></th></tr></thead><tbody></tbody></table>
+      <p class="note">Value uses today's <em>shop buys</em> price — what you'd actually get if you sold now.</p>
+    </section>
+  </main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

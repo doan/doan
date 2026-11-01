@@ -1,0 +1,25 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{db}/documents {
+    // Daily price snapshots. Only the Cloud Function writes these (Admin SDK bypasses rules).
+    match /prices/{day} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
+
+    // Each user's own gold holdings.
+    match /users/{uid}/holdings/{id} {
+      allow read, delete: if request.auth != null && request.auth.uid == uid;
+      allow create, update: if request.auth != null && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['type', 'chi', 'pricePerChi', 'boughtOn', 'createdAt'])
+        && request.resource.data.type in ['bar', 'ring']
+        && request.resource.data.chi is number && request.resource.data.chi > 0 && request.resource.data.chi <= 10000
+        && request.resource.data.pricePerChi is number && request.resource.data.pricePerChi > 0
+        && request.resource.data.boughtOn is string && request.resource.data.boughtOn.size() == 10;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
